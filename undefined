@@ -1,0 +1,9 @@
+import PartnerDashboard from "@/components/partner/PartnerDashboard";
+
+export default function PartnerDashboardStoryboard() {
+  return (
+    <div className="bg-white min-h-screen">
+      <PartnerDashboard />
+    </div>
+  );
+}
