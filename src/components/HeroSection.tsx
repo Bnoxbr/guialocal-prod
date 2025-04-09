@@ -19,7 +19,7 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({
-  backgroundImage = "https://images.unsplash.com/photo-1598446719622-0813a4c3d8be?w=2940&h=1200&fit=crop",
+  backgroundImage = "https://images.unsplash.com/photo-1598446719622-0813a4c3d8be?w=2940&h=1200&fit=crop&auto=format",
   title = "Descubra locais, viva momentos",
   subtitle = "Conecte-se com guias locais certificados para experiências inesquecíveis",
 }: HeroSectionProps) => {
@@ -27,7 +27,10 @@ const HeroSection = ({
     <div className="relative w-full min-h-[600px] md:h-[600px] bg-gray-900">
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+        }}
       >
         <div className="absolute inset-0 bg-black/50" />
       </div>

@@ -58,10 +58,31 @@ const defaultGuides: Guide[] = [
 
 const FeaturedGuides = ({
   guides = defaultGuides,
-  title = "Tipos de Turismo",
+  title = "Experiências para todos os Gostos",
   subtitle = "Escolha sua experiência ideal na região",
 }: FeaturedGuidesProps) => {
-  return <></>;
+  return (
+    <div className="w-full max-w-[1200px] mx-auto px-4 py-16 bg-white">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-emerald-900">{title}</h2>
+        <p className="text-muted-foreground mt-2">{subtitle}</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {guides.map((guide) => (
+          <GuideCard
+            key={guide.id}
+            name={guide.name}
+            photo={guide.photo}
+            location={guide.location}
+            languages={guide.languages}
+            rating={guide.rating}
+            specialties={guide.specialties}
+          />
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default FeaturedGuides;

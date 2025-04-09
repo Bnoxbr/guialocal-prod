@@ -1,30 +1,97 @@
-# React + TypeScript + Vite
+# LocalGuia - Marketplace para Guias Turísticos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Um marketplace moderno para conectar turistas com guias locais certificados nas regiões da Serra da Mantiqueira e Sul de Minas Gerais.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🏔️ Busca de guias por localização, atividade e data
+- 🧭 Perfis detalhados de guias com especialidades e avaliações
+- 📅 Sistema de reservas com confirmação em tempo real
+- 🔐 Autenticação de usuários (turistas e guias)
+- 📱 Design responsivo para desktop e dispositivos móveis
+- 🌐 Integração com Supabase para backend e autenticação
 
-## Expanding the ESLint configuration
+## Tecnologias
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React + TypeScript
+- Vite
+- Tailwind CSS
+- Shadcn/UI
+- Supabase (Autenticação, Banco de Dados, Storage)
+- React Router
 
-- Configure the top-level `parserOptions` property like this:
+## Pré-requisitos
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- Node.js 16+
+- npm ou yarn
+- Conta no Supabase
+
+## Configuração
+
+1. Clone o repositório
+
+```bash
+git clone https://github.com/seu-usuario/localguia.git
+cd localguia
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2. Instale as dependências
+
+```bash
+npm install
+# ou
+yarn install
+```
+
+3. Configure as variáveis de ambiente
+
+Crie um arquivo `.env.local` na raiz do projeto com as seguintes variáveis:
+
+```
+VITE_SUPABASE_URL=sua_url_do_supabase
+VITE_SUPABASE_ANON_KEY=sua_chave_anon_do_supabase
+```
+
+4. Execute o projeto em modo de desenvolvimento
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
+## Estrutura do Projeto
+
+```
+src/
+├── components/     # Componentes React
+│   ├── ui/         # Componentes de UI (Shadcn)
+│   ├── auth/       # Componentes de autenticação
+│   └── dashboard/  # Componentes do painel de controle
+├── lib/            # Utilitários e funções de API
+├── types/          # Definições de tipos TypeScript
+└── App.tsx         # Componente principal
+```
+
+## Configuração do Banco de Dados
+
+O projeto utiliza Supabase como backend. As migrações do banco de dados estão localizadas em `supabase/migrations/`.
+
+Para aplicar as migrações, execute:
+
+```bash
+npx supabase db push
+```
+
+## Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Faça commit das suas alterações (`git commit -m 'Adiciona nova feature'`)
+4. Faça push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para detalhes.
+

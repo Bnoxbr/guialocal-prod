@@ -35,7 +35,7 @@ const regionsData = {
       title: "Trekking Pico dos Marins",
       description: "Trilhas deslumbrantes, cachoeiras e clima de montanha",
       imageUrl:
-        "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80",
+        "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?w=600&q=80",
       location: "Piquete, SP",
       type: "Ecoturismo",
       category: "tour",
@@ -55,7 +55,7 @@ const regionsData = {
       title: "Chalé Vista Panorâmica",
       description: "Hospedagem com vista para o vale e café da manhã incluso",
       imageUrl:
-        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=600&q=80",
+        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600&q=80",
       location: "Monte Verde, MG",
       type: "Hospedagem",
       category: "accommodation",
@@ -67,7 +67,7 @@ const regionsData = {
       title: "Trilha da Bocaina",
       description: "Mata Atlântica preservada e vistas deslumbrantes",
       imageUrl:
-        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80",
+        "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80",
       location: "São José do Barreiro, SP",
       type: "Aventura",
       category: "tour",

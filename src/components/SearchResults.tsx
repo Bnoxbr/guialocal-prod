@@ -144,10 +144,10 @@ const SearchResults = ({
       {/* Right side - Map */}
       <div className="w-[40%] sticky top-0 h-screen">
         <div
-          className="w-full h-full bg-cover bg-center"
+          className="w-full h-full bg-cover bg-center relative"
           style={{
             backgroundImage:
-              "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80')",
+              "url('https://images.unsplash.com/photo-1598446719622-0813a4c3d8be?w=1200&q=80')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

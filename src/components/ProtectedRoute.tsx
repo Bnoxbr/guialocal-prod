@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getCurrentUser } from "@/lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
+import { Loader2 } from "lucide-react";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -14,19 +15,31 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const userData = await getCurrentUser();
-        if (userData.user) {
+        // Get current session
+        const { data: sessionData } = await supabase.auth.getSession();
+
+        if (sessionData.session) {
           setIsAuthenticated(true);
+          const userId = sessionData.session.user.id;
+          const userEmail = sessionData.session.user.email;
 
           // For admin check, we're using a hardcoded email for demo purposes
-          // In a real app, you'd check a role field in the user's profile
-          if (userData.user.email === "breno@ceo.com") {
+          if (userEmail === "breno@ceo.com") {
             setUserRole("admin");
           } else {
-            // Fetch user profile to get role
-            // This is a simplified example
-            const userEmail = userData.user.email;
-            setUserRole(userEmail?.includes("guide") ? "guide" : "tourist");
+            // Fetch user profile to get role from database
+            const { data: userData, error } = await supabase
+              .from("users")
+              .select("type")
+              .eq("id", userId)
+              .single();
+
+            if (error) {
+              console.error("Error fetching user role:", error);
+              setUserRole("tourist"); // Default role
+            } else {
+              setUserRole(userData.type);
+            }
           }
         } else {
           setIsAuthenticated(false);
@@ -40,13 +53,51 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
     };
 
     checkAuth();
+
+    // Subscribe to auth changes
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session) {
+          setIsAuthenticated(true);
+          const userId = session.user.id;
+          const userEmail = session.user.email;
+
+          // For admin check, we're using a hardcoded email for demo purposes
+          if (userEmail === "breno@ceo.com") {
+            setUserRole("admin");
+          } else {
+            // Fetch user profile to get role from database
+            const { data: userData, error } = await supabase
+              .from("users")
+              .select("type")
+              .eq("id", userId)
+              .single();
+
+            if (error) {
+              console.error("Error fetching user role:", error);
+              setUserRole("tourist"); // Default role
+            } else {
+              setUserRole(userData.type);
+            }
+          }
+        } else {
+          setIsAuthenticated(false);
+          setUserRole(null);
+        }
+      },
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
 
   // Show loading while checking authentication
   if (isAuthenticated === null) {
     return (
       <div className="flex items-center justify-center h-screen">
-        Carregando...
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+        <span className="ml-2">Carregando...</span>
       </div>
     );
   }
