@@ -1,11 +1,4 @@
 import React, { useState } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "./ui/carousel";
 import { Card, CardContent } from "./ui/card";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
@@ -24,7 +17,7 @@ interface Destination {
   category: "tour" | "restaurant" | "accommodation";
 }
 
-interface DestinationCarouselProps {
+interface DestinationGridProps {
   destinations?: Destination[];
 }
 
@@ -60,6 +53,16 @@ const regionsData = {
       type: "Hospedagem",
       category: "accommodation",
     },
+    {
+      id: 13,
+      title: "Passeio de Bicicleta",
+      description: "Explore as trilhas da serra em um passeio guiado",
+      imageUrl:
+        "https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=600&q=80",
+      location: "Campos do Jordão, SP",
+      type: "Aventura",
+      category: "tour",
+    },
   ],
   "Serra do Mar": [
     {
@@ -91,6 +94,16 @@ const regionsData = {
       location: "Cunha, SP",
       type: "Hospedagem",
       category: "accommodation",
+    },
+    {
+      id: 14,
+      title: "Observação de Aves",
+      description: "Observe dezenas de espécies de aves em seu habitat natural",
+      imageUrl:
+        "https://images.unsplash.com/photo-1621494547431-5eabcbfaa2f0?w=600&q=80",
+      location: "Ubatuba, SP",
+      type: "Ecoturismo",
+      category: "tour",
     },
   ],
   "Litoral Norte Paulista": [
@@ -124,6 +137,16 @@ const regionsData = {
       type: "Hospedagem",
       category: "accommodation",
     },
+    {
+      id: 15,
+      title: "Aula de Surf",
+      description: "Aprenda a surfar nas melhores praias do litoral",
+      imageUrl:
+        "https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=600&q=80",
+      location: "Ubatuba, SP",
+      type: "Aventura",
+      category: "tour",
+    },
   ],
   "Sul Fluminense": [
     {
@@ -156,12 +179,20 @@ const regionsData = {
       type: "Hospedagem",
       category: "accommodation",
     },
+    {
+      id: 16,
+      title: "Passeio de Caiaque",
+      description: "Explore as águas cristalinas da baía de Paraty",
+      imageUrl:
+        "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80",
+      location: "Paraty, RJ",
+      type: "Aventura",
+      category: "tour",
+    },
   ],
 };
 
-const DestinationCarousel = ({
-  destinations = [],
-}: DestinationCarouselProps) => {
+const DestinationGrid = ({ destinations = [] }: DestinationGridProps) => {
   const [activeRegion, setActiveRegion] = useState("Serra da Mantiqueira");
   const [activeCategory, setActiveCategory] = useState<
     "all" | "tour" | "restaurant" | "accommodation"
@@ -203,7 +234,7 @@ const DestinationCarousel = ({
   return (
     <div className="w-full max-w-[1200px] mx-auto px-4 py-16 bg-emerald-50">
       <h2 className="text-3xl font-bold text-center mb-8 text-emerald-900">
-        Destinos em Destaque
+        Conheça nossos destinos
       </h2>
 
       <Tabs
@@ -278,54 +309,51 @@ const DestinationCarousel = ({
               </div>
             </div>
 
-            <Carousel className="w-full">
-              <CarouselContent>
-                {filteredDestinations.map((destination) => (
-                  <CarouselItem
-                    key={destination.id}
-                    className="md:basis-1/2 lg:basis-1/3"
-                  >
-                    <Card className="mx-2">
-                      <CardContent className="p-0">
-                        <AspectRatio ratio={4 / 3}>
-                          <img
-                            src={destination.imageUrl}
-                            alt={destination.title}
-                            className="object-cover w-full h-full rounded-t-lg"
-                          />
-                        </AspectRatio>
-                        <div className="p-4 space-y-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                              {getCategoryIcon(destination.category)}
-                              <span className="text-sm">
-                                {destination.location}
-                              </span>
-                            </div>
-                            <Badge variant="outline">{destination.type}</Badge>
-                          </div>
-                          <h3 className="text-xl font-semibold">
-                            {destination.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground">
-                            {destination.description}
-                          </p>
-                          <Button variant="outline" className="w-full">
-                            {destination.category === "tour"
-                              ? "Reservar"
-                              : destination.category === "restaurant"
-                                ? "Fazer Reserva"
-                                : "Ver Disponibilidade"}
-                          </Button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filteredDestinations.map((destination) => (
+                <Card
+                  key={destination.id}
+                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                  onClick={() =>
+                    (window.location.href = `/destination/${destination.id}`)
+                  }
+                >
+                  <CardContent className="p-0">
+                    <AspectRatio ratio={4 / 3}>
+                      <img
+                        src={destination.imageUrl}
+                        alt={destination.title}
+                        className="object-cover w-full h-full rounded-t-lg"
+                      />
+                    </AspectRatio>
+                    <div className="p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          {getCategoryIcon(destination.category)}
+                          <span className="text-sm">
+                            {destination.location}
+                          </span>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="-left-4 sm:-left-12" />
-              <CarouselNext className="-right-4 sm:-right-12" />
-            </Carousel>
+                        <Badge variant="outline">{destination.type}</Badge>
+                      </div>
+                      <h3 className="text-xl font-semibold">
+                        {destination.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {destination.description}
+                      </p>
+                      <Button variant="outline" className="w-full">
+                        {destination.category === "tour"
+                          ? "Reservar"
+                          : destination.category === "restaurant"
+                            ? "Fazer Reserva"
+                            : "Ver Disponibilidade"}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
         ))}
       </Tabs>
@@ -333,4 +361,4 @@ const DestinationCarousel = ({
   );
 };
 
-export default DestinationCarousel;
+export default DestinationGrid;

@@ -8,7 +8,8 @@ export interface Tour {
   description?: string;
 }
 
-export const popularTours: Tour[] = [
+// Renamed from popularTours to reflect new section title
+export const whatToDoTours: Tour[] = [
   {
     id: "1",
     name: "Salto de Paraquedas em Boituva",

@@ -1,9 +1,9 @@
 import React from "react";
 import HeroSection from "./HeroSection";
-import DestinationCarousel from "./DestinationCarousel";
+import DestinationGrid from "./DestinationCarousel";
 import RegistrationSection from "./RegistrationSection";
 import TourListings from "./TourListings";
-import { popularTours, adventureTours } from "@/lib/tours";
+import { whatToDoTours, adventureTours } from "@/lib/tours";
 
 const Home = () => {
   return (
@@ -11,9 +11,9 @@ const Home = () => {
       {/* Hero Section */}
       <HeroSection />
       {/* Destination Carousel Section */}
-      <DestinationCarousel />
+      <DestinationGrid />
       {/* Popular Tours Section */}
-      <TourListings tours={popularTours} title="Experiências Populares" />
+      <TourListings tours={whatToDoTours} title="O que quer fazer?" />
       {/* Adventure Tours Section */}
       <TourListings tours={adventureTours} title="Mais Aventuras para Você" />
       {/* Registration Section */}

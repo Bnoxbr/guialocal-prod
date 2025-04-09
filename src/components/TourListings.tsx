@@ -21,7 +21,7 @@ interface TourListingsProps {
 
 const TourListings = ({
   tours,
-  title = "Experiências Populares",
+  title = "O que quer fazer?",
 }: TourListingsProps) => {
   return (
     <div className="w-full max-w-[1200px] mx-auto px-4 py-12 bg-white">
@@ -29,7 +29,7 @@ const TourListings = ({
         <h2 className="text-3xl font-bold text-emerald-900">{title}</h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-6 gap-4">
         {tours.map((tour) => (
           <Card
             key={tour.id}
