@@ -67,6 +67,7 @@ const TourListings = ({
                 <Button
                   size="sm"
                   className="bg-emerald-600 hover:bg-emerald-700"
+                  onClick={() => (window.location.href = `/tour/${tour.id}`)}
                 >
                   Reservar
                 </Button>
