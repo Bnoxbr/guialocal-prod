@@ -3,9 +3,10 @@ import { Card, CardContent } from "./ui/card";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { MapPin, Search, Utensils, Home } from "lucide-react";
+import { MapPin, Search, Utensils, Home, Info } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Input } from "./ui/input";
+import { useNavigate } from "react-router-dom";
 
 interface Destination {
   id: number;
@@ -25,6 +26,8 @@ const regionsData = {
   "Serra da Mantiqueira": {
     summary:
       "Região montanhosa com clima ameno, cachoeiras e trilhas deslumbrantes. Ideal para ecoturismo, aventuras ao ar livre e gastronomia local.",
+    history:
+      "A Serra da Mantiqueira é uma das maiores cadeias montanhosas do sudeste brasileiro, estendendo-se pelos estados de São Paulo, Minas Gerais e Rio de Janeiro. Seu nome tem origem na língua indígena e significa 'montanha que chora', referência às inúmeras nascentes e cachoeiras que brotam de suas encostas.",
     mainImage:
       "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?w=800&q=80",
     activities: [
@@ -73,6 +76,8 @@ const regionsData = {
   "Serra do Mar": {
     summary:
       "Cordilheira que se estende ao longo do litoral, com Mata Atlântica preservada, cachoeiras e vistas panorâmicas. Perfeita para trilhas, observação de aves e contato com a natureza.",
+    history:
+      "A Serra do Mar é uma formação montanhosa que se estende por aproximadamente 1.500 km ao longo do litoral brasileiro, do Espírito Santo até o norte de Santa Catarina. Abriga a maior porção contínua preservada de Mata Atlântica do Brasil e foi declarada Patrimônio Natural da Humanidade pela UNESCO.",
     mainImage:
       "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80",
     activities: [
@@ -122,6 +127,8 @@ const regionsData = {
   "Litoral Norte Paulista": {
     summary:
       "Praias paradisíacas, ilhas e reservas naturais. Destino ideal para esportes aquáticos, passeios de barco e gastronomia à beira-mar.",
+    history:
+      "O Litoral Norte Paulista é conhecido por suas praias paradisíacas, mata atlântica preservada e rica biodiversidade marinha. A região abrange os municípios de São Sebastião, Ilhabela, Caraguatatuba e Ubatuba, cada um com suas características próprias, mas todos oferecendo belezas naturais deslumbrantes.",
     mainImage:
       "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80",
     activities: [
@@ -170,6 +177,8 @@ const regionsData = {
   "Sul Fluminense": {
     summary:
       "Região histórica com cidades coloniais, baías e ilhas paradisíacas. Combina patrimônio cultural, praias tranquilas e gastronomia tradicional.",
+    history:
+      "O Sul Fluminense é uma região que combina belezas naturais e patrimônio histórico-cultural. Paraty, com seu centro histórico preservado, é Patrimônio Mundial da UNESCO. Angra dos Reis é famosa por suas 365 ilhas e águas cristalinas. A região também abriga comunidades tradicionais como caiçaras e quilombolas, que mantêm vivas suas tradições culturais.",
     mainImage:
       "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&q=80",
     activities: [
@@ -218,30 +227,28 @@ const regionsData = {
 };
 
 const DestinationGrid = ({ destinations = [] }: DestinationGridProps) => {
-  const [activeRegion, setActiveRegion] = useState("Serra da Mantiqueira");
+  const [activeRegion, setActiveRegion] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<
     "all" | "tour" | "restaurant" | "accommodation"
   >("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
-  const regionData = regionsData[activeRegion as keyof typeof regionsData];
+  const handleRegionClick = (region: string) => {
+    setActiveRegion(region);
+    setActiveCategory("all");
+  };
 
-  const filteredDestinations = regionData.activities.filter((destination) => {
-    if (activeCategory !== "all" && destination.category !== activeCategory) {
-      return false;
+  const handleCategoryClick = (
+    category: "all" | "tour" | "restaurant" | "accommodation",
+  ) => {
+    setActiveCategory(category);
+    if (category !== "all" && activeRegion) {
+      navigate(
+        `/search?region=${encodeURIComponent(activeRegion)}&category=${category}`,
+      );
     }
-
-    if (
-      searchTerm &&
-      !destination.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !destination.location.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      !destination.type.toLowerCase().includes(searchTerm.toLowerCase())
-    ) {
-      return false;
-    }
-
-    return true;
-  });
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -256,161 +263,219 @@ const DestinationGrid = ({ destinations = [] }: DestinationGridProps) => {
     }
   };
 
+  const filteredDestinations = activeRegion
+    ? regionsData[activeRegion as keyof typeof regionsData].activities.filter(
+        (destination) => {
+          if (
+            activeCategory !== "all" &&
+            destination.category !== activeCategory
+          ) {
+            return false;
+          }
+
+          if (
+            searchTerm &&
+            !destination.title
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()) &&
+            !destination.location
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()) &&
+            !destination.type.toLowerCase().includes(searchTerm.toLowerCase())
+          ) {
+            return false;
+          }
+
+          return true;
+        },
+      )
+    : [];
+
   return (
     <div className="w-full max-w-[1200px] mx-auto px-4 py-16 bg-emerald-50">
       <h2 className="text-3xl font-bold text-center mb-8 text-emerald-900">
         Conheça nossos destinos
       </h2>
 
-      <Tabs
-        defaultValue="Serra da Mantiqueira"
-        className="w-full"
-        onValueChange={setActiveRegion}
-      >
-        <TabsList className="grid grid-cols-4 mb-6">
-          <TabsTrigger value="Serra da Mantiqueira">
-            Serra da Mantiqueira
-          </TabsTrigger>
-          <TabsTrigger value="Serra do Mar">Serra do Mar</TabsTrigger>
-          <TabsTrigger value="Litoral Norte Paulista">
-            Litoral Norte Paulista
-          </TabsTrigger>
-          <TabsTrigger value="Sul Fluminense">Sul Fluminense</TabsTrigger>
-        </TabsList>
-
+      {/* Region Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {Object.keys(regionsData).map((region) => (
-          <TabsContent key={region} value={region} className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-6 mb-8">
-              <div className="md:w-1/3">
-                <AspectRatio
-                  ratio={16 / 9}
-                  className="mb-4 rounded-lg overflow-hidden"
+          <Card
+            key={region}
+            className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+          >
+            <CardContent className="p-0">
+              <AspectRatio ratio={16 / 9}>
+                <img
+                  src={
+                    regionsData[region as keyof typeof regionsData].mainImage
+                  }
+                  alt={region}
+                  className="object-cover w-full h-full"
+                />
+              </AspectRatio>
+              <div className="p-4 space-y-3">
+                <h3
+                  className="text-xl font-semibold text-emerald-800 hover:text-emerald-600 transition-colors"
+                  onClick={() => handleRegionClick(region)}
                 >
-                  <img
-                    src={
-                      regionsData[region as keyof typeof regionsData].mainImage
-                    }
-                    alt={region}
-                    className="object-cover w-full h-full"
-                  />
-                </AspectRatio>
-                <h3 className="text-2xl font-semibold mb-2 text-emerald-800">
                   {region}
                 </h3>
-                <p className="text-gray-700">
+                <p className="text-sm text-muted-foreground line-clamp-2">
                   {regionsData[region as keyof typeof regionsData].summary}
                 </p>
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center gap-2"
+                  onClick={() => handleRegionClick(region)}
+                >
+                  <Info className="w-4 h-4" />
+                  Conhecer região
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Region Details */}
+      {activeRegion && (
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="flex flex-col md:flex-row gap-6 mb-8">
+            <div className="md:w-1/3">
+              <AspectRatio
+                ratio={16 / 9}
+                className="mb-4 rounded-lg overflow-hidden"
+              >
+                <img
+                  src={
+                    regionsData[activeRegion as keyof typeof regionsData]
+                      .mainImage
+                  }
+                  alt={activeRegion}
+                  className="object-cover w-full h-full"
+                />
+              </AspectRatio>
+              <h3 className="text-2xl font-semibold mb-2 text-emerald-800">
+                {activeRegion}
+              </h3>
+              <p className="text-gray-700 mb-4">
+                {regionsData[activeRegion as keyof typeof regionsData].summary}
+              </p>
+              <h4 className="text-lg font-semibold mb-2 text-emerald-700">
+                História e Curiosidades
+              </h4>
+              <p className="text-gray-700">
+                {regionsData[activeRegion as keyof typeof regionsData].history}
+              </p>
+            </div>
+
+            <div className="md:w-2/3">
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex space-x-2 flex-wrap gap-2">
+                  <Button
+                    variant={activeCategory === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleCategoryClick("all")}
+                  >
+                    Todos
+                  </Button>
+                  <Button
+                    variant={activeCategory === "tour" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleCategoryClick("tour")}
+                  >
+                    Passeios
+                  </Button>
+                  <Button
+                    variant={
+                      activeCategory === "restaurant" ? "default" : "outline"
+                    }
+                    size="sm"
+                    onClick={() => handleCategoryClick("restaurant")}
+                  >
+                    Restaurantes
+                  </Button>
+                  <Button
+                    variant={
+                      activeCategory === "accommodation" ? "default" : "outline"
+                    }
+                    size="sm"
+                    onClick={() => handleCategoryClick("accommodation")}
+                  >
+                    Hospedagem
+                  </Button>
+                </div>
+
+                <div className="relative w-64">
+                  <Input
+                    placeholder="Buscar destinos..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pr-10"
+                  />
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="absolute right-0 top-0 h-full"
+                    onClick={() => setSearchTerm("")}
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
 
-              <div className="md:w-2/3">
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex space-x-2 flex-wrap gap-2">
-                    <Button
-                      variant={activeCategory === "all" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setActiveCategory("all")}
-                    >
-                      Todos
-                    </Button>
-                    <Button
-                      variant={
-                        activeCategory === "tour" ? "default" : "outline"
-                      }
-                      size="sm"
-                      onClick={() => setActiveCategory("tour")}
-                    >
-                      Passeios
-                    </Button>
-                    <Button
-                      variant={
-                        activeCategory === "restaurant" ? "default" : "outline"
-                      }
-                      size="sm"
-                      onClick={() => setActiveCategory("restaurant")}
-                    >
-                      Restaurantes
-                    </Button>
-                    <Button
-                      variant={
-                        activeCategory === "accommodation"
-                          ? "default"
-                          : "outline"
-                      }
-                      size="sm"
-                      onClick={() => setActiveCategory("accommodation")}
-                    >
-                      Hospedagem
-                    </Button>
-                  </div>
-
-                  <div className="relative w-64">
-                    <Input
-                      placeholder="Buscar destinos..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pr-10"
-                    />
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="absolute right-0 top-0 h-full"
-                      onClick={() => setSearchTerm("")}
-                    >
-                      <Search className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {filteredDestinations.map((destination) => (
-                    <Card
-                      key={destination.id}
-                      className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                      onClick={() =>
-                        (window.location.href = `/destination/${destination.id}`)
-                      }
-                    >
-                      <CardContent className="p-0">
-                        <AspectRatio ratio={4 / 3}>
-                          <img
-                            src={destination.imageUrl}
-                            alt={destination.title}
-                            className="object-cover w-full h-full rounded-t-lg"
-                          />
-                        </AspectRatio>
-                        <div className="p-4 space-y-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-muted-foreground">
-                              {getCategoryIcon(destination.category)}
-                              <span className="text-sm">
-                                {destination.location}
-                              </span>
-                            </div>
-                            <Badge variant="outline">{destination.type}</Badge>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {filteredDestinations.map((destination) => (
+                  <Card
+                    key={destination.id}
+                    className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                    onClick={() =>
+                      navigate(
+                        `/search?region=${encodeURIComponent(activeRegion || "")}&activity=${encodeURIComponent(destination.title)}`,
+                      )
+                    }
+                  >
+                    <CardContent className="p-0">
+                      <AspectRatio ratio={4 / 3}>
+                        <img
+                          src={destination.imageUrl}
+                          alt={destination.title}
+                          className="object-cover w-full h-full rounded-t-lg"
+                        />
+                      </AspectRatio>
+                      <div className="p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            {getCategoryIcon(destination.category)}
+                            <span className="text-sm">
+                              {destination.location}
+                            </span>
                           </div>
-                          <h3 className="text-xl font-semibold">
-                            {destination.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground">
-                            {destination.description}
-                          </p>
-                          <Button variant="outline" className="w-full">
-                            {destination.category === "tour"
-                              ? "Reservar"
-                              : destination.category === "restaurant"
-                                ? "Fazer Reserva"
-                                : "Ver Disponibilidade"}
-                          </Button>
+                          <Badge variant="outline">{destination.type}</Badge>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                        <h3 className="text-xl font-semibold">
+                          {destination.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {destination.description}
+                        </p>
+                        <Button variant="outline" className="w-full">
+                          {destination.category === "tour"
+                            ? "Reservar"
+                            : destination.category === "restaurant"
+                              ? "Fazer Reserva"
+                              : "Ver Disponibilidade"}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
