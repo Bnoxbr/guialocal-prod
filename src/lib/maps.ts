@@ -1,4 +1,5 @@
 // Free tier: 28,500 calls/month
+/// <reference types="@types/google.maps" />
 export const loadGoogleMaps = () => {
   const script = document.createElement("script");
   script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_KEY}&libraries=places`;

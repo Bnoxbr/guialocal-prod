@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Table,
   TableBody,
@@ -22,7 +23,159 @@ import {
   CheckCircle,
   XCircle,
   Clock,
+  Image as ImageIcon,
+  Map,
 } from "lucide-react";
+import { uploadImage } from "@/lib/storage";
+
+// Mock data for the regions that would normally come from a database
+const regionsData = {
+  "Serra da Mantiqueira": {
+    summary:
+      "Região montanhosa com clima ameno, cachoeiras e trilhas deslumbrantes. Ideal para ecoturismo, aventuras ao ar livre e gastronomia local.",
+    mainImage:
+      "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?w=800&q=80",
+  },
+  "Serra do Mar": {
+    summary:
+      "Cordilheira que se estende ao longo do litoral, com Mata Atlântica preservada, cachoeiras e vistas panorâmicas. Perfeita para trilhas, observação de aves e contato com a natureza.",
+    mainImage:
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&q=80",
+  },
+  "Litoral Norte Paulista": {
+    summary:
+      "Praias paradisíacas, ilhas e reservas naturais. Destino ideal para esportes aquáticos, passeios de barco e gastronomia à beira-mar.",
+    mainImage:
+      "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=800&q=80",
+  },
+  "Sul Fluminense": {
+    summary:
+      "Região histórica com cidades coloniais, baías e ilhas paradisíacas. Combina patrimônio cultural, praias tranquilas e gastronomia tradicional.",
+    mainImage:
+      "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?w=800&q=80",
+  },
+};
+
+interface RegionEditorProps {
+  regionName: string;
+}
+
+const RegionEditor = ({ regionName }: RegionEditorProps) => {
+  const region = regionsData[regionName as keyof typeof regionsData];
+  const [summary, setSummary] = useState(region.summary);
+  const [mainImage, setMainImage] = useState(region.mainImage);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      // In a real app, this would upload to your storage service
+      // const imageUrl = await uploadImage(file);
+      // For demo purposes, we'll just use a timeout to simulate upload
+      setTimeout(() => {
+        setMainImage(URL.createObjectURL(file));
+        setIsUploading(false);
+      }, 1500);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setIsUploading(false);
+    }
+  };
+
+  const handleSave = () => {
+    setIsSaving(true);
+    // In a real app, this would save to your database
+    setTimeout(() => {
+      // Update the mock data (in a real app, this would be a database update)
+      regionsData[regionName as keyof typeof regionsData] = {
+        ...regionsData[regionName as keyof typeof regionsData],
+        summary,
+        mainImage,
+      };
+      setIsSaving(false);
+      alert(`Região ${regionName} atualizada com sucesso!`);
+    }, 1000);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <Label
+            htmlFor="region-summary"
+            className="text-base font-medium mb-2 block"
+          >
+            Descrição da Região
+          </Label>
+          <Textarea
+            id="region-summary"
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            className="min-h-[150px]"
+            placeholder="Descreva a região..."
+          />
+        </div>
+
+        <div>
+          <Label
+            htmlFor="region-image"
+            className="text-base font-medium mb-2 block"
+          >
+            Imagem Principal
+          </Label>
+          <div className="border rounded-md p-4 space-y-4">
+            <div className="aspect-video rounded-md overflow-hidden bg-gray-100">
+              {mainImage ? (
+                <img
+                  src={mainImage}
+                  alt={regionName}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                  <ImageIcon className="h-12 w-12 text-gray-400" />
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-4">
+              <Label
+                htmlFor={`image-upload-${regionName}`}
+                className="cursor-pointer flex items-center gap-2 text-sm font-medium px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80"
+              >
+                <ImageIcon className="h-4 w-4" />
+                Alterar Imagem
+              </Label>
+              <Input
+                id={`image-upload-${regionName}`}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+                disabled={isUploading}
+              />
+              {isUploading && (
+                <span className="text-sm text-muted-foreground">
+                  Enviando...
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <Button onClick={handleSave} disabled={isSaving}>
+          {isSaving ? "Salvando..." : "Salvar Alterações"}
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -214,10 +367,11 @@ export default function AdminDashboard() {
       </div>
 
       <Tabs defaultValue="users" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="users">Usuários</TabsTrigger>
           <TabsTrigger value="bookings">Reservas</TabsTrigger>
           <TabsTrigger value="payments">Pagamentos</TabsTrigger>
+          <TabsTrigger value="regions">Regiões</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users" className="mt-6">
@@ -387,6 +541,46 @@ export default function AdminDashboard() {
                   )}
                 </TableBody>
               </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="regions" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Gerenciamento de Regiões</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Tabs defaultValue="Serra da Mantiqueira" className="w-full">
+                <TabsList className="grid w-full grid-cols-4 mb-6">
+                  <TabsTrigger value="Serra da Mantiqueira">
+                    Serra da Mantiqueira
+                  </TabsTrigger>
+                  <TabsTrigger value="Serra do Mar">Serra do Mar</TabsTrigger>
+                  <TabsTrigger value="Litoral Norte Paulista">
+                    Litoral Norte Paulista
+                  </TabsTrigger>
+                  <TabsTrigger value="Sul Fluminense">
+                    Sul Fluminense
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="Serra da Mantiqueira">
+                  <RegionEditor regionName="Serra da Mantiqueira" />
+                </TabsContent>
+
+                <TabsContent value="Serra do Mar">
+                  <RegionEditor regionName="Serra do Mar" />
+                </TabsContent>
+
+                <TabsContent value="Litoral Norte Paulista">
+                  <RegionEditor regionName="Litoral Norte Paulista" />
+                </TabsContent>
+
+                <TabsContent value="Sul Fluminense">
+                  <RegionEditor regionName="Sul Fluminense" />
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </TabsContent>
