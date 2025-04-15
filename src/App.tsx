@@ -8,6 +8,7 @@ import GuideDashboard from "./components/dashboard/GuideDashboard";
 import { LoginForm } from "./components/auth/LoginForm";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./components/admin/AdminDashboard";
+import TourDetail from "./components/TourDetail";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/booking/:guideId" element={<BookingConfirmation />} />
+        <Route path="/tour/:tourId" element={<TourDetail />} />
 
         {/* Protected routes */}
         <Route

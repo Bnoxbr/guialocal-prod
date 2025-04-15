@@ -3,6 +3,7 @@ import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Star, MapPin } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { useNavigate } from "react-router-dom";
 
 interface Tour {
   id: string;
@@ -23,6 +24,7 @@ const TourListings = ({
   tours,
   title = "O que quer fazer?",
 }: TourListingsProps) => {
+  const navigate = useNavigate();
   return (
     <div className="w-full max-w-[1200px] mx-auto px-4 py-12 bg-white">
       <div className="text-center mb-8">
@@ -67,9 +69,9 @@ const TourListings = ({
                 <Button
                   size="sm"
                   className="bg-emerald-600 hover:bg-emerald-700"
-                  onClick={() => (window.location.href = `/tour/${tour.id}`)}
+                  onClick={() => navigate(`/tour/${tour.id}`)}
                 >
-                  Reservar
+                  Confira
                 </Button>
               </div>
             </CardContent>
