@@ -369,8 +369,8 @@ export default function AdminDashboard() {
       <Tabs defaultValue="users" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="users">Usuários</TabsTrigger>
-          <TabsTrigger value="bookings">Reservas</TabsTrigger>
-          <TabsTrigger value="payments">Pagamentos</TabsTrigger>
+          <TabsTrigger value="partners">Parceiros</TabsTrigger>
+          <TabsTrigger value="finance">Financeiro</TabsTrigger>
           <TabsTrigger value="regions">Regiões</TabsTrigger>
         </TabsList>
 
@@ -430,117 +430,250 @@ export default function AdminDashboard() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="bookings" className="mt-6">
+        <TabsContent value="partners" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Gerenciamento de Reservas</CardTitle>
+              <CardTitle>Gerenciamento de Parceiros</CardTitle>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>Turista</TableHead>
-                    <TableHead>Guia</TableHead>
-                    <TableHead>Data</TableHead>
-                    <TableHead>Valor</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredBookings.length > 0 ? (
-                    filteredBookings.map((booking) => (
-                      <TableRow key={booking.id}>
-                        <TableCell>{booking.id}</TableCell>
-                        <TableCell>{booking.user_name}</TableCell>
-                        <TableCell>{booking.guide_name}</TableCell>
-                        <TableCell>{booking.date}</TableCell>
-                        <TableCell>R$ {booking.amount}</TableCell>
-                        <TableCell>{getStatusBadge(booking.status)}</TableCell>
-                        <TableCell className="flex space-x-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                          >
-                            <CheckCircle className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                          >
-                            <XCircle className="h-4 w-4" />
-                          </Button>
+              <Tabs defaultValue="guides" className="w-full">
+                <TabsList className="grid w-full grid-cols-5 mb-6">
+                  <TabsTrigger value="guides">Guias</TabsTrigger>
+                  <TabsTrigger value="tours">Passeios</TabsTrigger>
+                  <TabsTrigger value="restaurants">Restaurantes</TabsTrigger>
+                  <TabsTrigger value="activities">Atividades</TabsTrigger>
+                  <TabsTrigger value="hotels">Hotéis</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="guides">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Região</TableHead>
+                        <TableHead>Especialidades</TableHead>
+                        <TableHead>Avaliação</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center">
+                          Nenhum guia encontrado
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center">
-                        Nenhuma reserva encontrada
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
+                    </TableBody>
+                  </Table>
+                </TabsContent>
+
+                <TabsContent value="tours">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Região</TableHead>
+                        <TableHead>Duração</TableHead>
+                        <TableHead>Preço</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center">
+                          Nenhum passeio encontrado
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TabsContent>
+
+                <TabsContent value="restaurants">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Região</TableHead>
+                        <TableHead>Tipo de Cozinha</TableHead>
+                        <TableHead>Avaliação</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center">
+                          Nenhum restaurante encontrado
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TabsContent>
+
+                <TabsContent value="activities">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Região</TableHead>
+                        <TableHead>Tipo</TableHead>
+                        <TableHead>Preço</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center">
+                          Nenhuma atividade encontrada
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TabsContent>
+
+                <TabsContent value="hotels">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Região</TableHead>
+                        <TableHead>Categoria</TableHead>
+                        <TableHead>Avaliação</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center">
+                          Nenhum hotel encontrado
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="payments" className="mt-6">
+        <TabsContent value="finance" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Gerenciamento de Pagamentos</CardTitle>
+              <CardTitle>Gerenciamento Financeiro</CardTitle>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>ID da Reserva</TableHead>
-                    <TableHead>Valor</TableHead>
-                    <TableHead>Método</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Data</TableHead>
-                    <TableHead>Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredPayments.length > 0 ? (
-                    filteredPayments.map((payment) => (
-                      <TableRow key={payment.id}>
-                        <TableCell>{payment.id}</TableCell>
-                        <TableCell>{payment.booking_id}</TableCell>
-                        <TableCell>R$ {payment.amount}</TableCell>
-                        <TableCell>
-                          {payment.method === "credit_card"
-                            ? "Cartão de Crédito"
-                            : "PIX"}
-                        </TableCell>
-                        <TableCell>{getStatusBadge(payment.status)}</TableCell>
-                        <TableCell>{payment.date}</TableCell>
-                        <TableCell>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                          >
-                            <Clock className="h-4 w-4" />
-                          </Button>
+              <Tabs defaultValue="payments" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-6">
+                  <TabsTrigger value="payments">Pagamentos</TabsTrigger>
+                  <TabsTrigger value="revenue">Receitas</TabsTrigger>
+                  <TabsTrigger value="expenses">Despesas</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="payments">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>ID da Reserva</TableHead>
+                        <TableHead>Valor</TableHead>
+                        <TableHead>Método</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Data</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredPayments.length > 0 ? (
+                        filteredPayments.map((payment) => (
+                          <TableRow key={payment.id}>
+                            <TableCell>{payment.id}</TableCell>
+                            <TableCell>{payment.booking_id}</TableCell>
+                            <TableCell>R$ {payment.amount}</TableCell>
+                            <TableCell>
+                              {payment.method === "credit_card"
+                                ? "Cartão de Crédito"
+                                : "PIX"}
+                            </TableCell>
+                            <TableCell>
+                              {getStatusBadge(payment.status)}
+                            </TableCell>
+                            <TableCell>{payment.date}</TableCell>
+                            <TableCell>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                              >
+                                <Clock className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={7} className="text-center">
+                            Nenhum pagamento encontrado
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TabsContent>
+
+                <TabsContent value="revenue">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Descrição</TableHead>
+                        <TableHead>Categoria</TableHead>
+                        <TableHead>Valor</TableHead>
+                        <TableHead>Data</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center">
+                          Nenhuma receita encontrada
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center">
-                        Nenhum pagamento encontrado
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
+                    </TableBody>
+                  </Table>
+                </TabsContent>
+
+                <TabsContent value="expenses">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Descrição</TableHead>
+                        <TableHead>Categoria</TableHead>
+                        <TableHead>Valor</TableHead>
+                        <TableHead>Data</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center">
+                          Nenhuma despesa encontrada
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </TabsContent>
@@ -551,34 +684,196 @@ export default function AdminDashboard() {
               <CardTitle>Gerenciamento de Regiões</CardTitle>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="Serra da Mantiqueira" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 mb-6">
-                  <TabsTrigger value="Serra da Mantiqueira">
-                    Serra da Mantiqueira
+              <Tabs defaultValue="region-list" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 mb-6">
+                  <TabsTrigger value="region-list">
+                    Lista de Regiões
                   </TabsTrigger>
-                  <TabsTrigger value="Serra do Mar">Serra do Mar</TabsTrigger>
-                  <TabsTrigger value="Litoral Norte Paulista">
-                    Litoral Norte Paulista
-                  </TabsTrigger>
-                  <TabsTrigger value="Sul Fluminense">
-                    Sul Fluminense
+                  <TabsTrigger value="region-edit">Editar Regiões</TabsTrigger>
+                  <TabsTrigger value="city-management">
+                    Gerenciar Cidades
                   </TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="Serra da Mantiqueira">
-                  <RegionEditor regionName="Serra da Mantiqueira" />
+                <TabsContent value="region-list">
+                  <div className="mb-4 flex justify-end">
+                    <Button>
+                      <Map className="mr-2 h-4 w-4" /> Adicionar Nova Região
+                    </Button>
+                  </div>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Nº de Cidades</TableHead>
+                        <TableHead>Nº de Atrações</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {Object.keys(regionsData).map((regionName, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{regionName}</TableCell>
+                          <TableCell>5</TableCell>
+                          <TableCell>12</TableCell>
+                          <TableCell>
+                            <Badge className="bg-green-500">Ativo</Badge>
+                          </TableCell>
+                          <TableCell className="flex space-x-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                            >
+                              <Map className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                            >
+                              <XCircle className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </TabsContent>
 
-                <TabsContent value="Serra do Mar">
-                  <RegionEditor regionName="Serra do Mar" />
+                <TabsContent value="region-edit">
+                  <Tabs defaultValue="Serra da Mantiqueira" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4 mb-6">
+                      <TabsTrigger value="Serra da Mantiqueira">
+                        Serra da Mantiqueira
+                      </TabsTrigger>
+                      <TabsTrigger value="Serra do Mar">
+                        Serra do Mar
+                      </TabsTrigger>
+                      <TabsTrigger value="Litoral Norte Paulista">
+                        Litoral Norte Paulista
+                      </TabsTrigger>
+                      <TabsTrigger value="Sul Fluminense">
+                        Sul Fluminense
+                      </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="Serra da Mantiqueira">
+                      <RegionEditor regionName="Serra da Mantiqueira" />
+                    </TabsContent>
+
+                    <TabsContent value="Serra do Mar">
+                      <RegionEditor regionName="Serra do Mar" />
+                    </TabsContent>
+
+                    <TabsContent value="Litoral Norte Paulista">
+                      <RegionEditor regionName="Litoral Norte Paulista" />
+                    </TabsContent>
+
+                    <TabsContent value="Sul Fluminense">
+                      <RegionEditor regionName="Sul Fluminense" />
+                    </TabsContent>
+                  </Tabs>
                 </TabsContent>
 
-                <TabsContent value="Litoral Norte Paulista">
-                  <RegionEditor regionName="Litoral Norte Paulista" />
-                </TabsContent>
-
-                <TabsContent value="Sul Fluminense">
-                  <RegionEditor regionName="Sul Fluminense" />
+                <TabsContent value="city-management">
+                  <div className="mb-4 flex justify-end">
+                    <Button>
+                      <Map className="mr-2 h-4 w-4" /> Adicionar Nova Cidade
+                    </Button>
+                  </div>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Região</TableHead>
+                        <TableHead>Nº de Atrações</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Ações</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>1</TableCell>
+                        <TableCell>Campos do Jordão</TableCell>
+                        <TableCell>Serra da Mantiqueira</TableCell>
+                        <TableCell>8</TableCell>
+                        <TableCell>
+                          <Badge className="bg-green-500">Ativo</Badge>
+                        </TableCell>
+                        <TableCell className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <Map className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <XCircle className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>2</TableCell>
+                        <TableCell>São José dos Campos</TableCell>
+                        <TableCell>Serra da Mantiqueira</TableCell>
+                        <TableCell>5</TableCell>
+                        <TableCell>
+                          <Badge className="bg-green-500">Ativo</Badge>
+                        </TableCell>
+                        <TableCell className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <Map className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <XCircle className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>3</TableCell>
+                        <TableCell>Cunha</TableCell>
+                        <TableCell>Serra da Mantiqueira</TableCell>
+                        <TableCell>6</TableCell>
+                        <TableCell>
+                          <Badge className="bg-green-500">Ativo</Badge>
+                        </TableCell>
+                        <TableCell className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <Map className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                          >
+                            <XCircle className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
                 </TabsContent>
               </Tabs>
             </CardContent>
