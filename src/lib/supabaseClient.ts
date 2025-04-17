@@ -103,7 +103,7 @@ export const createBooking = async (bookingData: any) => {
     .select();
 
   if (error) throw error;
-  return data;
+  return { data, error };
 };
 
 // Favorites functions
