@@ -6,6 +6,8 @@ import SearchResults from "./components/SearchResults";
 import BookingConfirmation from "./components/BookingConfirmation";
 import GuideDashboard from "./components/dashboard/GuideDashboard";
 import { LoginForm } from "./components/auth/LoginForm";
+import PasswordResetForm from "./components/auth/PasswordResetForm";
+import UpdatePasswordForm from "./components/auth/UpdatePasswordForm";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import TourDetail from "./components/TourDetail";
@@ -21,6 +23,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/forgot-password" element={<PasswordResetForm />} />
+        <Route path="/reset-password" element={<UpdatePasswordForm />} />
         <Route path="/booking/:guideId" element={<BookingConfirmation />} />
         <Route path="/tour/:tourId" element={<TourDetail />} />
 

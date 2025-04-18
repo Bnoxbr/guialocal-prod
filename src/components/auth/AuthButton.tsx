@@ -8,7 +8,7 @@ import {
 } from "../ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { supabase, signOut } from "@/lib/supabaseClient";
+import { supabase, signOut, refreshSession } from "@/lib/supabaseClient";
 
 export const AuthButton = () => {
   const navigate = useNavigate();
@@ -19,6 +19,14 @@ export const AuthButton = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        // Check if session needs refresh
+        const lastRefresh = localStorage.getItem("last_session_refresh");
+        const now = Date.now();
+
+        if (lastRefresh && now - parseInt(lastRefresh, 10) > 55 * 60 * 1000) {
+          await refreshSession();
+        }
+
         const { data } = await supabase.auth.getSession();
         if (data.session) {
           setIsAuthenticated(true);
@@ -31,6 +39,11 @@ export const AuthButton = () => {
             .single();
 
           setUserRole(userData?.type || null);
+
+          // Update last refresh time if not set
+          if (!lastRefresh) {
+            localStorage.setItem("last_session_refresh", now.toString());
+          }
         } else {
           setIsAuthenticated(false);
           setUserRole(null);

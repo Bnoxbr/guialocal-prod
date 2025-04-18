@@ -1,7 +1,8 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase, refreshSession } from "@/lib/supabaseClient";
 import { Loader2 } from "lucide-react";
+import { useToast } from "./ui/use-toast";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -11,6 +12,8 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const location = useLocation();
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -104,11 +107,22 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    // Pass the current location to redirect back after login
+    return (
+      <Navigate
+        to={`/login?redirectTo=${encodeURIComponent(location.pathname)}`}
+        replace
+      />
+    );
   }
 
   // Check role if required
   if (requiredRole && userRole !== requiredRole) {
+    toast({
+      title: "Acesso negado",
+      description: `Você precisa ser um ${requiredRole === "admin" ? "administrador" : requiredRole === "guide" ? "guia" : "turista"} para acessar esta página.`,
+      variant: "destructive",
+    });
     return <Navigate to="/" replace />;
   }
 
