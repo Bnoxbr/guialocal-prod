@@ -9,6 +9,9 @@ interface ProtectedRouteProps {
   requiredRole?: "admin" | "guide" | "tourist";
 }
 
+// Admin emails list for easy maintenance
+const ADMIN_EMAILS = ["breno@ceo.com", "admin@localguia.com"];
+
 const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
@@ -26,8 +29,8 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
           const userId = sessionData.session.user.id;
           const userEmail = sessionData.session.user.email;
 
-          // For admin check, we're using a hardcoded email for demo purposes
-          if (userEmail === "breno@ceo.com") {
+          // Check if user is an admin based on email
+          if (ADMIN_EMAILS.includes(userEmail || "")) {
             setUserRole("admin");
           } else {
             // Fetch user profile to get role from database
@@ -65,8 +68,8 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
           const userId = session.user.id;
           const userEmail = session.user.email;
 
-          // For admin check, we're using a hardcoded email for demo purposes
-          if (userEmail === "breno@ceo.com") {
+          // Check if user is an admin based on email
+          if (ADMIN_EMAILS.includes(userEmail || "")) {
             setUserRole("admin");
           } else {
             // Fetch user profile to get role from database
